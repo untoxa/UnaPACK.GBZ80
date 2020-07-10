@@ -2,15 +2,11 @@
 ; Intel 8080 version by Ivan Gorodetsky, 2018-2020
 ; GBZ80 adaptation by Tony Pavlov, 2020
 ; No self-modifying code
-; v1 - 205/210 bytes (single-use/reusable)
-; v2 - 210/215 bytes (single-use/reusable) - long offsets support added, thanks
 ; Based on z80 version by dwedit/utopian/Metalbrain
 
 ; de = source
 ; bc = dest
-; call unapack
-
-;#DEFINE REUSABLE
+; call UNAPACK
 
 .area _CODE
 
@@ -51,10 +47,10 @@ APLOOP:
         CALL    Z,AP_GETBIT3
         JR      NC,APBRANCH3
         LD      L,A
-        LD      H,#0x10 ; 10000B
+        LD      H,#0x10
 APGET4BITS:
         ADD     A,A
-        JR      NZ,APGET4BITS1 ; $+7 ?
+        JR      NZ,APGET4BITS1
         LD      A,(DE)
         INC     DE
         LD      L,A
@@ -88,15 +84,13 @@ APBRANCH3:
         ADC     A,H
         PUSH    DE
 
-        ;LD      (OFFSET),HL ; can spare E here
-	LD      E, A
+        LD      E, A
+	
         LD      A,L
         LD      (OFFSET), A
         LD      A,H
         LD      (OFFSET+1), A
-	LD      A, E
 
-        LD      E,A
         LD      D,H
         JR      AP_FINISHUP
 APBRANCH2:
@@ -116,7 +110,6 @@ APBRANCH2:
 
         INC     DE
 
-        ;LD      (OFFSET),HL ; can spare A here
         LD      A,L
         LD      (OFFSET), A
         LD      A,H
@@ -125,7 +118,6 @@ APBRANCH2:
         PUSH    HL
         CALL    AP_GETGAMMA_
         
-        ;EX      (SP),HL
         PUSH    DE
         DI
         ADD     SP,#2
@@ -182,7 +174,6 @@ AP_R0_GAMMA:
         CALL    AP_GETGAMMA_
         PUSH    HL
 
-;        LD      HL,(OFFSET) ; can spare A here
         LD      HL,#OFFSET
         LD      A,(HL+)
         LD      H,(HL)
@@ -211,7 +202,7 @@ AP_GETGAMMALOOP:
         ADD     HL,HL
         ADD     A,A
         CALL    Z,AP_GETBIT3
-        JR      NC,AP_GETGAMMALOOP1 ; $+4?
+        JR      NC,AP_GETGAMMALOOP1
         INC     L
 AP_GETGAMMALOOP1:
         ADD     A,A
