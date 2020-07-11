@@ -85,7 +85,7 @@ APBRANCH3:
         PUSH    DE
 
         LD      E, A
-	
+
         LD      A,L
         LD      (OFFSET), A
         LD      A,H
@@ -117,15 +117,16 @@ APBRANCH2:
 
         PUSH    HL
         CALL    AP_GETGAMMA_
-        
+
         PUSH    DE
-        DI
-        ADD     SP,#2
-        POP     DE
-        PUSH    HL
-        ADD     SP,#-2
-        EI
-        LD      H,D
+        LD      A,L
+        LD      D,H
+        LDA     HL,2(SP)
+        LD      E,(HL)
+        LD      (HL+),A
+        LD      A,(HL)
+        LD      (HL),D
+        LD      H,A
         LD      L,E
         POP     DE
 
