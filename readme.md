@@ -2,7 +2,7 @@ UnaPACK adaptation for GBZ80
 
 Original version: https://gitlab.com/ivagor/unapack
 
-May be used with GBDK/GBDK-2020
+May be used with GBDK/GBDK-2020 v.4.1 and higher
 
 Decompressor for aPLib
 
